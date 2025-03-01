@@ -40,6 +40,9 @@ jobs:
           VITE_AIRTABLE_BASE_ID: ${{ secrets.VITE_AIRTABLE_BASE_ID }}
           VITE_AIRTABLE_TABLE_NAME: ${{ secrets.VITE_AIRTABLE_TABLE_NAME }}
       
+      - name: Create .nojekyll
+        run: touch ./dist/.nojekyll
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
@@ -47,7 +50,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
-          include: '.nojekyll'
       
       - name: Deploy to GitHub Pages
         id: deployment
