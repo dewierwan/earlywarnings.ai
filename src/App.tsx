@@ -70,12 +70,6 @@ function App() {
     return () => clearInterval(timer);
   }, [quotes.length]);
 
-  useEffect(() => {
-    console.log('Current base URL:', import.meta.env.BASE_URL);
-    console.log('Document base URL:', document.baseURI);
-    console.log('Window location:', window.location.href);
-  }, []);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-white p-6 flex items-center justify-center">
