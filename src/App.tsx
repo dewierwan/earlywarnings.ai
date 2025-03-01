@@ -11,9 +11,24 @@ function App() {
   const [columns, setColumns] = useState(3);
 
   useEffect(() => {
-    loadQuotes()
-      .then(setQuotes)
-      .finally(() => setLoading(false));
+    const fetchQuotes = async () => {
+      try {
+        const loadedQuotes = await loadQuotes();
+        setQuotes(loadedQuotes);
+        setLoading(false);
+        
+        // Debug log to check image URLs
+        console.log('Quotes with images:', loadedQuotes.map(q => ({
+          author: q.author,
+          imageUrl: q.image
+        })));
+      } catch (error) {
+        console.error('Error loading quotes:', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchQuotes();
   }, []);
 
   useEffect(() => {
