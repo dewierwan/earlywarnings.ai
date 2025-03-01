@@ -99,7 +99,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 p-6">
       <header className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-800">AI Concern Quotes</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Concerns about AI</h1>
       </header>
       
       {currentQuote && (
