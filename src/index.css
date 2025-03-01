@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add custom background color for cards with higher contrast */
+.card-bg {
+  @apply bg-white shadow-md;
+}
