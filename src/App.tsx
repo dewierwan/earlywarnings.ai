@@ -186,15 +186,15 @@ function App() {
   const renderQuoteCard = (quote: Quote, index: number) => (
     <div 
       key={index} 
-      className="p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 transition-transform duration-200 cursor-pointer transform hover:-translate-y-1 flex flex-col bg-white dark:bg-gray-800"
+      className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-200 cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
       onClick={() => setSelectedQuote(quote)}
     >
-      <p className="text-gray-800 dark:text-gray-200 mb-4 flex-grow overflow-y-auto">{quote.text}</p>
-      <div className="flex justify-between items-center mt-auto">
-        <span className="text-indigo-600 dark:text-indigo-400 font-medium">
+      <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex-grow overflow-y-auto line-clamp-6 sm:line-clamp-none">{quote.text}</p>
+      <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
+        <span className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium truncate max-w-[80%]">
           {quote.author} ({quote.year})
         </span>
-        <ArrowRight className="h-5 w-5 text-indigo-400 dark:text-indigo-300" />
+        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400 dark:text-indigo-300 flex-shrink-0" />
       </div>
     </div>
   );
@@ -202,38 +202,40 @@ function App() {
   const currentQuote = quotes[currentCarouselIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-6">
-      <header className="mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
-        <button 
-          onClick={toggleDarkMode}
-          className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg"
-          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-        >
-          {darkMode ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
-        </button>
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6">
+      <header className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg transition-transform duration-200 hover:scale-105"
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </header>
       
       {currentQuote && (
-        <div className="max-w-4xl mx-auto mb-12">
+        <div className="max-w-4xl mx-auto mb-8 sm:mb-12 px-0 sm:px-4">
           <div 
-            className={`bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 ${
+            className={`bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 ${
               isCarouselFading ? 'opacity-0' : 'opacity-100'
             }`}
           >
-            <p className="text-xl text-gray-800 dark:text-gray-200 mb-6">{currentQuote.text}</p>
-            <div className="flex justify-between items-end">
-              <div className="flex">
+            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200 mb-4 sm:mb-6">{currentQuote.text}</p>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 sm:gap-0">
+              <div className="flex items-start sm:items-center gap-3">
                 {currentQuote.image && (
-                  <div className="mr-4 flex-shrink-0">
+                  <div className="flex-shrink-0">
                     <img 
                       src={currentQuote.image} 
                       alt={currentQuote.author} 
-                      className="w-16 h-16 object-cover rounded-md shadow-md"
+                      className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-md shadow-md"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
@@ -241,15 +243,15 @@ function App() {
                   </div>
                 )}
                 <div>
-                  <p className="text-lg text-indigo-600 dark:text-indigo-400 font-medium">{currentQuote.author}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{currentQuote.bio}</p>
+                  <p className="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium">{currentQuote.author}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{currentQuote.bio}</p>
                 </div>
               </div>
               <a 
                 href={currentQuote.url} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-sm text-blue-500 dark:text-blue-400 hover:underline ml-4"
+                className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 sm:mt-0 sm:ml-4 self-end"
               >
                 Source
               </a>
@@ -258,8 +260,9 @@ function App() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto">
-        <MasonryLayout columns={columns}>
+      <div className="max-w-6xl mx-auto px-0 sm:px-2">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 ml-1 sm:ml-0">All Quotes</h2>
+        <MasonryLayout columns={columns} gap={16}>
           {quotes.map((quote, index) => renderQuoteCard(quote, index))}
         </MasonryLayout>
       </div>

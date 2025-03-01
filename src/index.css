@@ -6,3 +6,48 @@
 .card-bg {
   @apply bg-white shadow-md;
 }
+
+/* Improve tap target sizes on mobile devices */
+@layer utilities {
+  .tap-highlight-transparent {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Responsive font size adjustments */
+@layer base {
+  html {
+    font-size: 15px;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  /* Smooth scrolling and prevent content shift */
+  body {
+    @apply antialiased;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
+
+  /* Improved mobile touch targets */
+  button, a {
+    @apply tap-highlight-transparent;
+  }
+}
+
+/* Line clamp utilities for truncating text */
+.line-clamp-6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
+/* Add smooth transitions for better UX */
+* {
+  @apply transition-colors duration-200;
+}
