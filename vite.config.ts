@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/ai-concern-quotes/',
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name].[ext]',
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js',
+      input: {
+        main: './index.html',
       },
     },
   },
