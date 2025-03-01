@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { loadQuotes, Quote } from './data/quotes';
 import { Modal } from './components/Modal';
 import { MasonryLayout } from './components/MasonryLayout';
