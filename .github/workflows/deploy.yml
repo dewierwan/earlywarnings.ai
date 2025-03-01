@@ -47,6 +47,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+          include: '.nojekyll'
       
       - name: Deploy to GitHub Pages
         id: deployment
