@@ -189,11 +189,25 @@ function App() {
       className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-200 cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
       onClick={() => setSelectedQuote(quote)}
     >
-      <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex-grow overflow-y-auto line-clamp-6 sm:line-clamp-none">{quote.text}</p>
+      <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex-grow overflow-y-auto max-h-[200px] line-clamp-6 sm:line-clamp-none custom-scrollbar">{quote.text}</p>
       <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
-        <span className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium truncate max-w-[80%]">
-          {quote.author} ({quote.year})
-        </span>
+        <div className="flex items-center gap-2 overflow-hidden">
+          {quote.image && (
+            <div className="flex-shrink-0">
+              <img 
+                src={quote.image} 
+                alt={quote.author} 
+                className="w-6 h-6 sm:w-7 sm:h-7 object-cover rounded-full border border-indigo-200 dark:border-indigo-700 shadow-sm"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+          <span className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium truncate max-w-[80%]">
+            {quote.author} ({quote.year})
+          </span>
+        </div>
         <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400 dark:text-indigo-300 flex-shrink-0" />
       </div>
     </div>
@@ -227,7 +241,9 @@ function App() {
               isCarouselFading ? 'opacity-0' : 'opacity-100'
             }`}
           >
-            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200 mb-4 sm:mb-6">{currentQuote.text}</p>
+            <div className="max-h-[40vh] overflow-y-auto mb-4 sm:mb-6 custom-scrollbar">
+              <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200">{currentQuote.text}</p>
+            </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 sm:gap-0">
               <div className="flex items-start sm:items-center gap-3">
                 {currentQuote.image && (

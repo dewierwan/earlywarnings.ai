@@ -60,7 +60,9 @@ export function Modal({ quote, onClose }: ModalProps) {
         >
           <X size={20} />
         </button>
-        <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200 mb-6 pr-6 sm:pr-8" id="modal-title">{quote.text}</p>
+        <div className="max-h-[60vh] overflow-y-auto mb-6 pr-2 sm:pr-4 custom-scrollbar">
+          <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200 pr-4 sm:pr-4" id="modal-title">{quote.text}</p>
+        </div>
         
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 sm:gap-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
