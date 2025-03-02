@@ -1,6 +1,6 @@
 import { Quote } from '../data/quotes';
 import { X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface ModalProps {
   quote: Quote | null;
@@ -15,6 +15,9 @@ export function Modal({ quote, onClose }: ModalProps) {
 
   // Handle modal focus trap for accessibility and touch scrolling
   useEffect(() => {
+    // Save current scroll position
+    const scrollY = window.scrollY;
+    
     // Focus the modal when it opens
     if (modalRef.current) {
       modalRef.current.focus();
@@ -22,6 +25,10 @@ export function Modal({ quote, onClose }: ModalProps) {
 
     // Disable body scroll while modal is open
     document.body.style.overflow = 'hidden';
+    // Fix body position to prevent jumping
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
     
     // Handle ESC key to close modal
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,14 +41,21 @@ export function Modal({ quote, onClose }: ModalProps) {
     
     // Cleanup
     return () => {
+      // Restore body scroll
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      // Restore scroll position
+      window.scrollTo(0, scrollY);
+      
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onClose]);
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm z-50 overflow-y-auto"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm z-50"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -49,19 +63,19 @@ export function Modal({ quote, onClose }: ModalProps) {
     >
       <div 
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 max-w-2xl w-full relative shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[90vh] sm:max-h-[85vh] overflow-y-auto my-4 sm:my-0"
+        className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 max-w-2xl w-full relative shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[90vh] sm:max-h-[85vh] overflow-y-auto my-4 sm:my-0 custom-scrollbar"
         onClick={e => e.stopPropagation()}
         tabIndex={0}
       >
         <button 
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 p-1 bg-gray-100 dark:bg-gray-700 rounded-full z-10"
+          className="sticky top-3 right-3 sm:top-4 sm:right-4 float-right text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 p-1 bg-gray-100 dark:bg-gray-700 rounded-full z-10"
           aria-label="Close modal"
         >
           <X size={20} />
         </button>
-        <div className="max-h-[60vh] overflow-y-auto mb-6 pr-2 sm:pr-4 custom-scrollbar">
-          <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200 pr-4 sm:pr-4" id="modal-title">{quote.text}</p>
+        <div className="mb-6 pr-2 sm:pr-4 clear-right">
+          <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200" id="modal-title">{quote.text}</p>
         </div>
         
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 sm:gap-0">

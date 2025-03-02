@@ -27,10 +27,16 @@
   }
 
   /* Smooth scrolling and prevent content shift */
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply antialiased;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overscroll-behavior-y: none;
     scrollbar-gutter: stable;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Improved mobile touch targets */
@@ -56,10 +62,12 @@
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -73,4 +81,11 @@
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(75, 85, 99, 0.5);
+}
+
+/* Fix iOS momentum scrolling for modal */
+@supports (-webkit-touch-callout: none) {
+  .modal-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
 }

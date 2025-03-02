@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useLayoutEffect } from 'react';
 
 interface MasonryLayoutProps {
   children: ReactNode[];
@@ -16,7 +16,7 @@ export function MasonryLayout({
   const [columnGap, setColumnGap] = useState(gap);
   
   // Adjust columns and gap based on screen size
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       // Determine appropriate gap size based on screen width
       const newGap = window.innerWidth < 640 ? Math.floor(gap * 0.5) : gap;
@@ -26,9 +26,18 @@ export function MasonryLayout({
     // Call once on mount
     handleResize();
     
-    // Add resize listener
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Add resize listener with debounce for better performance
+    let resizeTimer: number;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(handleResize, 100);
+    };
+    
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', debouncedResize);
+    };
   }, [gap]);
   
   // Use the passed columns prop which should already be responsive
@@ -74,7 +83,7 @@ export function MasonryLayout({
   
   // Return a responsive flex container
   return (
-    <div className="flex w-full">
+    <div className="flex w-full overflow-visible">
       {result}
     </div>
   );
