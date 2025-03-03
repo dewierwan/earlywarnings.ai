@@ -80,17 +80,26 @@ function App() {
         </div>
       </header>
       
-      {currentQuote && (
-        <div className="max-w-4xl mx-auto mb-8 sm:mb-12 px-0 sm:px-4">
+      {/* Featured quote container with min-height to prevent layout shifts */}
+      <div className="min-h-[350px] sm:min-h-[320px] md:min-h-[300px]">
+        {currentQuote && (
+          <div className="max-w-4xl mx-auto mb-8 sm:mb-12 px-0 sm:px-4">
           <div 
-            className={`bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 theme-transition ${
+            className={`bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 theme-transition hover:shadow-xl cursor-pointer active:scale-[0.995] transform hover:border-indigo-300 dark:hover:border-indigo-500 ${
               isCarouselFading ? 'opacity-0' : 'opacity-100'
             }`}
+            onClick={() => setSelectedQuote(currentQuote)}
+            aria-label="Click to see full quote details"
           >
             <div className="max-h-[40vh] overflow-y-auto mb-4 sm:mb-6 custom-scrollbar">
               <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200">{currentQuote.text}</p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6 relative">
+              <div className="absolute bottom-0 right-0 mb-1 mr-1 text-indigo-400 dark:text-indigo-500 opacity-70">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                  <path d="M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7"/>
+                </svg>
+              </div>
               <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
                 {currentQuote.image && (
                   <div className="flex-shrink-0">
@@ -111,16 +120,21 @@ function App() {
                     href={currentQuote.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 inline-block"
+                    className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 inline-flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     Source
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+                      <path d="M7 7l9.2 9.2M17 7v10H7" />
+                    </svg>
                   </a>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
       <div className="max-w-6xl mx-auto px-0 sm:px-2">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 ml-1 sm:ml-0">All Quotes</h2>
