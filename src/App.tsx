@@ -3,8 +3,9 @@ import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { Quote } from './data/quotes';
 import { Modal } from './components/Modal';
 import { MasonryLayout } from './components/MasonryLayout';
+import { SortControl } from './components/SortControl';
 import { useTheme } from './utils/useTheme';
-import { useQuotes } from './utils/useQuotes';
+import { useQuotes, SortDirection } from './utils/useQuotes';
 import { useResponsive } from './utils/useResponsive';
 
 // Memoize the quote card component for better performance
@@ -48,7 +49,7 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
 function App() {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const { darkMode, toggleDarkMode } = useTheme();
-  const { quotes, loading, error, currentQuote, isCarouselFading } = useQuotes();
+  const { quotes, loading, error, currentQuote, isCarouselFading, sortDirection, sortQuotes } = useQuotes();
   const { columns } = useResponsive();
 
   if (loading) {
@@ -160,7 +161,10 @@ function App() {
       </div>
 
       <div className="max-w-6xl mx-auto px-0 sm:px-2">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 ml-1 sm:ml-0">All Quotes</h2>
+        <div className="flex justify-between items-center mb-4 mx-1 sm:mx-0">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">All Quotes</h2>
+          <SortControl sortDirection={sortDirection} onSort={sortQuotes} />
+        </div>
         <MasonryLayout columns={columns} gap={16}>
           {quotes.map((quote, index) => (
             <QuoteCard 
