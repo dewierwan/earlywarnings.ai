@@ -77,13 +77,24 @@ function App() {
     }
   });
 
-  // Apply dark mode class to document
+  // Apply dark mode class to document with transition
   useEffect(() => {
+    // Add transitioning class to enable overlay effect
+    document.documentElement.classList.add('theme-transitioning');
+    
+    // Apply dark mode class
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+    
+    // Remove transitioning class after animation completes
+    const transitionTimeout = setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 400); // Slightly longer than the CSS transition
+    
+    return () => clearTimeout(transitionTimeout);
   }, [darkMode]);
 
   // Listen for system preference changes if user hasn't set a preference
@@ -186,7 +197,7 @@ function App() {
   const renderQuoteCard = (quote: Quote, index: number) => (
     <div 
       key={index} 
-      className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-200 cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
+      className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 theme-transition cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
       onClick={() => setSelectedQuote(quote)}
     >
       <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex-grow line-clamp-6 sm:line-clamp-6">{quote.text}</p>
@@ -218,20 +229,19 @@ function App() {
   const currentQuote = quotes[currentCarouselIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6 theme-transition">
+      {/* Theme transition overlay */}
+      <div className="theme-transition-container"></div>
       <header className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <button 
             onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg transition-transform duration-200 hover:scale-105"
+            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg theme-transition hover:scale-105 relative w-9 h-9 flex items-center justify-center"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {darkMode ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
+            <Sun className="h-5 w-5 theme-icon icon-sun" />
+            <Moon className="h-5 w-5 theme-icon icon-moon" />
           </button>
         </div>
       </header>
@@ -239,7 +249,7 @@ function App() {
       {currentQuote && (
         <div className="max-w-4xl mx-auto mb-8 sm:mb-12 px-0 sm:px-4">
           <div 
-            className={`bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 ${
+            className={`bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700 transition-opacity duration-500 theme-transition ${
               isCarouselFading ? 'opacity-0' : 'opacity-100'
             }`}
           >

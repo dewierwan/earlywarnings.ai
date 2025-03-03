@@ -53,9 +53,71 @@
   overflow: hidden;
 }
 
-/* Add smooth transitions for better UX */
-* {
-  @apply transition-colors duration-200;
+/* Theme transitions for better UX */
+:root {
+  --transition-speed: 350ms;
+  --transition-curve: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apply transitions to specific properties for better performance */
+html {
+  transition: background-color var(--transition-speed) var(--transition-curve);
+}
+
+body {
+  transition: background-color var(--transition-speed) var(--transition-curve),
+              color var(--transition-speed) var(--transition-curve);
+}
+
+.theme-transition {
+  transition: background-color var(--transition-speed) var(--transition-curve),
+              border-color var(--transition-speed) var(--transition-curve),
+              color var(--transition-speed) var(--transition-curve),
+              box-shadow var(--transition-speed) var(--transition-curve),
+              transform 150ms ease-in-out;
+}
+
+/* Transition container to handle full page transitions */
+.theme-transition-container {
+  @apply fixed inset-0 pointer-events-none z-[60] opacity-0;
+  transition: opacity var(--transition-speed) var(--transition-curve);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .theme-transition-container {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Active state when transitioning */
+.theme-transitioning .theme-transition-container {
+  opacity: 1;
+}
+
+/* Icon transition */
+.theme-icon {
+  @apply absolute;
+  transition: transform 350ms var(--transition-curve), 
+              opacity 350ms var(--transition-curve);
+}
+
+.icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.dark .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.dark .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
 }
 
 /* Custom scrollbar styles */
