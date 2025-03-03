@@ -21,7 +21,7 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
             <img 
               src={quote.image} 
               alt={quote.author} 
-              className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full border border-indigo-200 dark:border-indigo-700 shadow-sm"
+              className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-md border border-gray-200 dark:border-gray-700 shadow-sm"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
