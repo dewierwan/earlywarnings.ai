@@ -91,45 +91,62 @@ function App() {
             onClick={() => setSelectedQuote(currentQuote)}
             aria-label="Click to see full quote details"
           >
-            <div className="max-h-[40vh] overflow-y-auto mb-4 sm:mb-6 custom-scrollbar">
-              <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200">{currentQuote.text}</p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6 relative">
-              <div className="absolute bottom-0 right-0 mb-1 mr-1 text-indigo-400 dark:text-indigo-500 opacity-70">
+            {/* Author header */}
+            <div className="pb-4 border-b border-gray-200 dark:border-gray-700 mb-4 relative">
+              <div className="absolute top-0 right-0 mt-0 mr-0 text-indigo-400 dark:text-indigo-500 opacity-70">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                   <path d="M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7"/>
                 </svg>
               </div>
-              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
+              <div className="flex items-start gap-4">
                 {currentQuote.image && (
                   <div className="flex-shrink-0">
                     <img 
                       src={currentQuote.image} 
                       alt={currentQuote.author} 
-                      className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
+                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
                     />
                   </div>
                 )}
-                <div className="flex flex-col justify-center">
-                  <p className="text-base sm:text-lg md:text-xl text-indigo-600 dark:text-indigo-400 font-medium">{currentQuote.author}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-3 max-w-md">{currentQuote.bio}</p>
-                  <a 
-                    href={currentQuote.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 inline-flex items-center gap-1"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Source
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
-                      <path d="M7 7l9.2 9.2M17 7v10H7" />
-                    </svg>
-                  </a>
+                
+                <div className="flex-1">
+                  <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
+                    {currentQuote.author}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 pr-6 line-clamp-3">
+                    {currentQuote.bio}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 font-medium">
+                    {currentQuote.year}
+                  </p>
                 </div>
               </div>
+            </div>
+            
+            {/* Quote text */}
+            <div className="max-h-[40vh] overflow-y-auto mb-5 custom-scrollbar">
+              <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200">
+                {currentQuote.text}
+              </p>
+            </div>
+            
+            {/* Footer with source link */}
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+              <a 
+                href={currentQuote.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-500 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                View Source
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+                  <path d="M7 7l9.2 9.2M17 7v10H7" />
+                </svg>
+              </a>
             </div>
           </div>
           </div>

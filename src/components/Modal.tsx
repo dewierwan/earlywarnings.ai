@@ -71,16 +71,14 @@ export function Modal({ quote, onClose }: ModalProps) {
               )}
               
               <div className="flex-1">
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
-                    {quote.author}
-                  </h2>
-                  <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-                    ({quote.year})
-                  </span>
-                </div>
+                <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
+                  {quote.author}
+                </h2>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 pr-6">
                   {quote.bio}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 font-medium">
+                  {quote.year}
                 </p>
               </div>
             </div>
