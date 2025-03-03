@@ -77,24 +77,14 @@ function App() {
     }
   });
 
-  // Apply dark mode class to document with transition
+  // Apply dark mode class to document with no transition
   useEffect(() => {
-    // Add transitioning class to enable overlay effect
-    document.documentElement.classList.add('theme-transitioning');
-    
     // Apply dark mode class
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-    
-    // Remove transitioning class after animation completes
-    const transitionTimeout = setTimeout(() => {
-      document.documentElement.classList.remove('theme-transitioning');
-    }, 400); // Slightly longer than the CSS transition
-    
-    return () => clearTimeout(transitionTimeout);
   }, [darkMode]);
 
   // Listen for system preference changes if user hasn't set a preference
@@ -230,18 +220,19 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6 theme-transition">
-      {/* Theme transition overlay */}
-      <div className="theme-transition-container"></div>
       <header className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <button 
             onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg theme-transition hover:scale-105 relative w-9 h-9 flex items-center justify-center"
+            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg hover:scale-105"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
-            <Sun className="h-5 w-5 theme-icon icon-sun" />
-            <Moon className="h-5 w-5 theme-icon icon-moon" />
+            {darkMode ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
           </button>
         </div>
       </header>
