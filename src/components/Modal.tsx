@@ -56,13 +56,13 @@ export function Modal({ quote, onClose }: ModalProps) {
           
           {/* Author header */}
           <div className="pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6">
               {quote.image && (
                 <div className="flex-shrink-0">
                   <img 
                     src={quote.image} 
                     alt={quote.author} 
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
+                    className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
@@ -74,10 +74,10 @@ export function Modal({ quote, onClose }: ModalProps) {
                 <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
                   {quote.author}
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 pr-6">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 pr-6">
                   {quote.bio}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 font-medium">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">
                   {quote.year}
                 </p>
               </div>
@@ -86,7 +86,7 @@ export function Modal({ quote, onClose }: ModalProps) {
           
           {/* Quote text */}
           <div className="max-h-[40vh] overflow-y-auto mb-5 custom-scrollbar">
-            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200" id="modal-title">
+            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-100" id="modal-title">
               {quote.text}
             </p>
           </div>

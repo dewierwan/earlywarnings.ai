@@ -31,7 +31,7 @@ export function useQuotes() {
       setTimeout(() => {
         setCurrentCarouselIndex((prev) => (prev + 1) % quotes.length);
         setIsCarouselFading(false);
-      }, 500);
+      }, 1000);
     };
 
     const timer = setInterval(transitionQuote, 9000);
