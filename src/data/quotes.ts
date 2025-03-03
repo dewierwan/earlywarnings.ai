@@ -10,6 +10,7 @@ export interface Quote {
   image?: string;
 }
 
+// Initialize Airtable base
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
 
 /**
@@ -30,13 +31,26 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export async function loadQuotes(): Promise<Quote[]> {
-  console.log('Config:', {
-    apiKey: AIRTABLE_API_KEY?.slice(0,5) + '...',
-    baseId: AIRTABLE_BASE_ID,
-    tableName: AIRTABLE_TABLE_NAME
-  });
+/**
+ * Extract image URL from Airtable field which could be in different formats
+ */
+function extractImageUrl(imageField: any): string {
+  if (!imageField) return '';
+  
+  if (typeof imageField === 'string') {
+    return imageField;
+  } else if (Array.isArray(imageField) && imageField.length > 0) {
+    // Airtable sometimes returns attachments as an array of objects
+    return imageField[0].url || '';
+  }
+  
+  return '';
+}
 
+/**
+ * Load quotes from Airtable and return them in a shuffled order
+ */
+export async function loadQuotes(): Promise<Quote[]> {
   try {
     const records = await base(AIRTABLE_TABLE_NAME)
       .select({
@@ -44,37 +58,20 @@ export async function loadQuotes(): Promise<Quote[]> {
       })
       .all();
     
-    console.log('Records fetched:', records.length);
-    
     // Convert Airtable records to Quote objects
-    const quotes = records.map(record => {
-      // Handle image field which could be an attachment object or a string
-      let imageUrl = '';
-      const imageField = record.get('Image');
-      
-      if (imageField) {
-        if (typeof imageField === 'string') {
-          imageUrl = imageField;
-        } else if (Array.isArray(imageField) && imageField.length > 0) {
-          // Airtable sometimes returns attachments as an array of objects
-          imageUrl = imageField[0].url || '';
-        }
-      }
-      
-      return {
-        text: record.get('Quote') as string,
-        author: record.get('Person') as string,
-        year: Number(record.get('Year')),
-        url: record.get('URL') as string,
-        bio: record.get('Bio') as string,
-        image: imageUrl
-      };
-    });
+    const quotes = records.map(record => ({
+      text: record.get('Quote') as string,
+      author: record.get('Person') as string,
+      year: Number(record.get('Year')),
+      url: record.get('URL') as string,
+      bio: record.get('Bio') as string,
+      image: extractImageUrl(record.get('Image'))
+    }));
     
     // Shuffle the quotes before returning
     return shuffleArray(quotes);
   } catch (error) {
-    console.error('Airtable error:', error);
-    throw error;
+    console.error('Error loading quotes from Airtable:', error);
+    throw new Error('Failed to load quotes. Please try again later.');
   }
 }

@@ -1,6 +1,7 @@
 import { Quote } from '../data/quotes';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   quote: Quote | null;
@@ -8,7 +9,7 @@ interface ModalProps {
 }
 
 /**
- * Modal component completely rebuilt from scratch to avoid scroll issues
+ * Modal component using React.createPortal for better DOM placement
  */
 export function Modal({ quote, onClose }: ModalProps) {
   if (!quote) return null;
@@ -23,13 +24,13 @@ export function Modal({ quote, onClose }: ModalProps) {
     
     window.addEventListener('keydown', handleEscape);
     
-    // Cleanup function that does nothing to body
+    // Cleanup function
     return () => {
       window.removeEventListener('keydown', handleEscape);
     };
   }, [onClose]);
 
-  return (
+  const modalContent = (
     <>
       {/* Background overlay with onClick handler */}
       <div className="modal-overlay" onClick={onClose}></div>
@@ -99,4 +100,7 @@ export function Modal({ quote, onClose }: ModalProps) {
       </div>
     </>
   );
+
+  // Use createPortal to render the modal at the end of the document body
+  return createPortal(modalContent, document.body);
 }
