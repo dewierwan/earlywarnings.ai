@@ -7,7 +7,7 @@ export interface Quote {
   year: number;
   url: string;
   bio: string;
-  image?: string;
+  image: string; // Changed from optional to required
 }
 
 // Initialize Airtable base
@@ -58,15 +58,36 @@ export async function loadQuotes(): Promise<Quote[]> {
       })
       .all();
     
-    // Convert Airtable records to Quote objects
-    const quotes = records.map(record => ({
-      text: record.get('Quote') as string,
-      author: record.get('Person') as string,
-      year: Number(record.get('Year')),
-      url: record.get('URL') as string,
-      bio: record.get('Bio') as string,
-      image: extractImageUrl(record.get('Image'))
-    }));
+    // Convert Airtable records to Quote objects and filter out incomplete quotes
+    const quotes = records
+      .map(record => {
+        // Get the year and make sure it's a valid number
+        const yearValue = record.get('Year');
+        const year = yearValue ? Number(yearValue) : NaN;
+        
+        const quote = {
+          text: record.get('Quote') as string,
+          author: record.get('Person') as string,
+          year: year,
+          url: record.get('URL') as string,
+          bio: record.get('Bio') as string,
+          image: extractImageUrl(record.get('Image'))
+        };
+        
+        return quote;
+      })
+      // Filter out quotes with missing fields
+      .filter(quote => 
+        Boolean(quote.text) && 
+        Boolean(quote.author) && 
+        !isNaN(quote.year) && // Check that year is a valid number
+        Boolean(quote.url) && 
+        Boolean(quote.bio) && 
+        Boolean(quote.image)
+      );
+    
+    console.log(`Filtered out ${records.length - quotes.length} quotes with missing fields.`);
+    console.log(`Displaying ${quotes.length} complete quotes.`);
     
     // Shuffle the quotes before returning
     return shuffleArray(quotes);
