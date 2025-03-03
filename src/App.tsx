@@ -225,14 +225,11 @@ function App() {
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <button 
             onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg hover:scale-105"
+            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center"
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {darkMode ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
+            <Sun className="h-5 w-5 theme-icon icon-sun" />
+            <Moon className="h-5 w-5 theme-icon icon-moon" />
           </button>
         </div>
       </header>

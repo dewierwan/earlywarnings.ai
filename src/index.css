@@ -58,6 +58,33 @@
   /* No transitions */
 }
 
+/* Icon transition for theme toggle */
+.theme-icon {
+  position: absolute;
+  transition: transform 350ms cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.dark .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+.dark .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
 /* Custom scrollbar styles */
 .custom-scrollbar {
   scrollbar-width: thin;
