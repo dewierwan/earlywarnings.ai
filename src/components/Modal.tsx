@@ -54,22 +54,15 @@ export function Modal({ quote, onClose }: ModalProps) {
             <X size={20} />
           </button>
           
-          {/* Quote text */}
-          <div className="pt-2 mb-6 pr-8">
-            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200" id="modal-title">
-              {quote.text}
-            </p>
-          </div>
-          
-          {/* Author info and source link */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6">
-            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
+          {/* Author header */}
+          <div className="pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
+            <div className="flex items-start gap-4">
               {quote.image && (
                 <div className="flex-shrink-0">
                   <img 
                     src={quote.image} 
                     alt={quote.author} 
-                    className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
@@ -77,23 +70,42 @@ export function Modal({ quote, onClose }: ModalProps) {
                 </div>
               )}
               
-              <div className="flex flex-col justify-center">
-                <p className="text-md sm:text-lg md:text-xl text-indigo-600 dark:text-indigo-400 font-medium">
-                  {quote.author}
-                </p>
-                <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-md">
+              <div className="flex-1">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
+                    {quote.author}
+                  </h2>
+                  <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+                    ({quote.year})
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 pr-6">
                   {quote.bio}
                 </p>
-                <a 
-                  href={quote.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-3 inline-block"
-                >
-                  Source
-                </a>
               </div>
             </div>
+          </div>
+          
+          {/* Quote text */}
+          <div className="max-h-[40vh] overflow-y-auto mb-5 custom-scrollbar">
+            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200" id="modal-title">
+              {quote.text}
+            </p>
+          </div>
+          
+          {/* Footer with source link */}
+          <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+            <a 
+              href={quote.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-blue-500 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+            >
+              View Source
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+                <path d="M7 7l9.2 9.2M17 7v10H7" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
