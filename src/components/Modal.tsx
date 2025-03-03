@@ -31,12 +31,12 @@ export function Modal({ quote, onClose }: ModalProps) {
 
   return (
     <>
-      {/* Background overlay */}
+      {/* Background overlay with onClick handler */}
       <div className="modal-overlay" onClick={onClose}></div>
       
-      {/* Modal container */}
-      <div className="modal-container">
-        {/* Modal content */}
+      {/* Modal container with onClick handler that closes the modal */}
+      <div className="modal-container" onClick={onClose}>
+        {/* Modal content - stopping propagation to prevent container's onClick */}
         <div 
           className="modal-content dark:bg-gray-800 dark:border-gray-700"
           onClick={(e) => e.stopPropagation()}
