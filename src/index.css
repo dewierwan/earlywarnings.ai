@@ -83,9 +83,44 @@
   background-color: rgba(75, 85, 99, 0.5);
 }
 
-/* Fix iOS momentum scrolling for modal */
+/* Modal styles and iOS momentum scrolling fix */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.modal-container {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 42rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(229, 231, 235);
+  position: relative;
+  z-index: 51;
+}
+
+.dark .modal-content {
+  background-color: #1f2937;
+  border-color: rgba(55, 65, 81);
+}
+
 @supports (-webkit-touch-callout: none) {
-  .modal-scroll {
+  .modal-content {
     -webkit-overflow-scrolling: touch;
   }
 }
