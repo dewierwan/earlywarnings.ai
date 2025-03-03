@@ -6,27 +6,29 @@ import { createPortal } from 'react-dom';
 interface ModalProps {
   quote: Quote | null;
   onClose: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
 }
 
 /**
  * Modal component using React.createPortal for better DOM placement
  */
-export function Modal({ quote, onClose }: ModalProps) {
+export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
   if (!quote) return null;
   
-  // Add event handler for escape key
+  // Add event handler for Escape key only
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
     
-    window.addEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleKeyPress);
     
     // Cleanup function
     return () => {
-      window.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('keydown', handleKeyPress);
     };
   }, [onClose]);
 

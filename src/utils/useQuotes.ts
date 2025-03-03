@@ -19,11 +19,10 @@ export type SortDirection = 'asc' | 'desc' | 'none';
 
 export function useQuotes() {
   const [allQuotes, setAllQuotes] = useState<Quote[]>([]);
-  const [featuredQuotes, setFeaturedQuotes] = useState<Quote[]>([]);
-  const [sortedQuotes, setSortedQuotes] = useState<Quote[]>([]);
+  const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isCarouselFading, setIsCarouselFading] = useState(false);
   const [sortDirection, setSortDirection] = useState<SortDirection>('none');
 
@@ -33,8 +32,7 @@ export function useQuotes() {
       try {
         const loadedQuotes = await loadQuotes();
         setAllQuotes(loadedQuotes);
-        setFeaturedQuotes(loadedQuotes); // Keep a separate copy for the featured quotes
-        setSortedQuotes(loadedQuotes);   // Copy for sorting in the grid below
+        setQuotes(loadedQuotes);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Unknown error loading quotes'));
@@ -45,54 +43,87 @@ export function useQuotes() {
     fetchQuotes();
   }, []);
 
-  // Carousel effect - uses the featuredQuotes array which is never sorted
-  useEffect(() => {
-    if (featuredQuotes.length === 0) return;
+  // Simple autoplay function for the carousel
+  const navigateCarousel = (direction: 'next' | 'prev' = 'next') => {
+    if (quotes.length === 0) return;
     
-    const transitionQuote = () => {
+    setIsCarouselFading(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => {
+        if (direction === 'next') {
+          return (prev + 1) % quotes.length;
+        } else {
+          return (prev - 1 + quotes.length) % quotes.length;
+        }
+      });
+      setIsCarouselFading(false);
+    }, 300);
+  };
+
+  // Carousel autoplay effect - follows the sorted order
+  useEffect(() => {
+    if (quotes.length === 0) return;
+    
+    const timer = setInterval(() => {
       setIsCarouselFading(true);
       setTimeout(() => {
-        setCurrentCarouselIndex((prev) => (prev + 1) % featuredQuotes.length);
+        setCurrentIndex((prev) => (prev + 1) % quotes.length);
         setIsCarouselFading(false);
-      }, 1000);
-    };
-
-    const timer = setInterval(transitionQuote, 9000);
+      }, 300);
+    }, 10000);
+    
     return () => clearInterval(timer);
-  }, [featuredQuotes.length]);
+  }, [quotes.length]);
 
-  // Sort quotes by year - only affects the grid quotes, not the featured quote
+  // Sort quotes function - simplified to work with a single quotes array
   const sortQuotes = (direction: SortDirection) => {
     setSortDirection(direction);
     
+    // Store current quote reference before sorting
+    const currentQuote = quotes[currentIndex];
+    let sortedQuotes: Quote[];
+    
     if (direction === 'none') {
-      // When user selects the shuffle option, reshuffle the quotes
-      // rather than reverting to original order
-      setSortedQuotes(shuffleArray([...allQuotes]));
-      return;
+      // When user selects shuffle option
+      sortedQuotes = shuffleArray([...allQuotes]);
+    } else {
+      // Apply sort by year
+      sortedQuotes = [...allQuotes].sort((a, b) => {
+        return direction === 'asc' ? a.year - b.year : b.year - a.year;
+      });
     }
     
-    const sorted = [...sortedQuotes].sort((a, b) => {
-      if (direction === 'asc') {
-        return a.year - b.year;
-      } else {
-        return b.year - a.year;
-      }
-    });
+    // Update quotes with new sorted array
+    setQuotes(sortedQuotes);
     
-    setSortedQuotes(sorted);
+    // Try to preserve the current quote after sorting
+    if (currentQuote) {
+      const newIndex = sortedQuotes.findIndex(q => 
+        q.author === currentQuote.author && 
+        q.text.substring(0, 50) === currentQuote.text.substring(0, 50)
+      );
+      
+      if (newIndex !== -1) {
+        setCurrentIndex(newIndex);
+      } else {
+        // If quote not found in new order, reset to first quote
+        setCurrentIndex(0);
+      }
+    }
   };
 
-  const currentQuote = featuredQuotes.length > 0 ? featuredQuotes[currentCarouselIndex] : null;
+  // Current quote points to the quote in the sorted array
+  const currentQuote = quotes.length > 0 ? quotes[currentIndex] : null;
 
   return {
-    quotes: sortedQuotes, // Return sorted quotes for the grid
+    quotes,             // Single source of truth - all quotes use the same array and sort
     loading,
     error,
-    currentQuote,        // This comes from the unsorted featuredQuotes
+    currentQuote,       // Current quote from the sorted array
     isCarouselFading,
-    setCurrentCarouselIndex,
     sortDirection,
-    sortQuotes
+    sortQuotes,
+    nextQuote: () => navigateCarousel('next'),
+    prevQuote: () => navigateCarousel('prev')
   };
 }
