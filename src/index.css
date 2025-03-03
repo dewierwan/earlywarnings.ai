@@ -63,6 +63,7 @@
 /* Disable all transitions for theme changes */
 .theme-transition {
   /* No transitions */
+  transition: none !important;
 }
 
 /* Icon transition for theme toggle */
