@@ -12,6 +12,24 @@ export interface Quote {
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
 
+/**
+ * Shuffles an array using the Fisher-Yates (Knuth) shuffle algorithm
+ * @param array The array to shuffle
+ * @returns A new shuffled array
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  // Create a copy of the array to avoid mutating the original
+  const shuffled = [...array];
+  
+  // Fisher-Yates shuffle
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
+  return shuffled;
+}
+
 export async function loadQuotes(): Promise<Quote[]> {
   console.log('Config:', {
     apiKey: AIRTABLE_API_KEY?.slice(0,5) + '...',
@@ -27,9 +45,9 @@ export async function loadQuotes(): Promise<Quote[]> {
       .all();
     
     console.log('Records fetched:', records.length);
-    console.log('First record:', records[0]?.fields);
-
-    return records.map(record => {
+    
+    // Convert Airtable records to Quote objects
+    const quotes = records.map(record => {
       // Handle image field which could be an attachment object or a string
       let imageUrl = '';
       const imageField = record.get('Image');
@@ -40,7 +58,6 @@ export async function loadQuotes(): Promise<Quote[]> {
         } else if (Array.isArray(imageField) && imageField.length > 0) {
           // Airtable sometimes returns attachments as an array of objects
           imageUrl = imageField[0].url || '';
-          console.log('Image attachment:', imageField[0]);
         }
       }
       
@@ -53,6 +70,9 @@ export async function loadQuotes(): Promise<Quote[]> {
         image: imageUrl
       };
     });
+    
+    // Shuffle the quotes before returning
+    return shuffleArray(quotes);
   } catch (error) {
     console.error('Airtable error:', error);
     throw error;
