@@ -15,13 +15,13 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
   >
     <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex-grow line-clamp-6 sm:line-clamp-6">{quote.text}</p>
     <div className="flex justify-between items-center mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
-      <div className="flex items-center gap-2 overflow-hidden">
+      <div className="flex items-center gap-3 overflow-hidden">
         {quote.image && (
           <div className="flex-shrink-0">
             <img 
               src={quote.image} 
               alt={quote.author} 
-              className="w-6 h-6 sm:w-7 sm:h-7 object-cover rounded-full border border-indigo-200 dark:border-indigo-700 shadow-sm"
+              className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full border border-indigo-200 dark:border-indigo-700 shadow-sm"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
@@ -90,33 +90,33 @@ function App() {
             <div className="max-h-[40vh] overflow-y-auto mb-4 sm:mb-6 custom-scrollbar">
               <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-200">{currentQuote.text}</p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 sm:gap-0">
-              <div className="flex items-start sm:items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
                 {currentQuote.image && (
                   <div className="flex-shrink-0">
                     <img 
                       src={currentQuote.image} 
                       alt={currentQuote.author} 
-                      className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-md shadow-md"
+                      className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
                     />
                   </div>
                 )}
-                <div>
-                  <p className="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium">{currentQuote.author}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{currentQuote.bio}</p>
+                <div className="flex flex-col justify-center">
+                  <p className="text-base sm:text-lg md:text-xl text-indigo-600 dark:text-indigo-400 font-medium">{currentQuote.author}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-3 max-w-md">{currentQuote.bio}</p>
+                  <a 
+                    href={currentQuote.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 inline-block"
+                  >
+                    Source
+                  </a>
                 </div>
               </div>
-              <a 
-                href={currentQuote.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 sm:mt-0 sm:ml-4 self-end"
-              >
-                Source
-              </a>
             </div>
           </div>
         </div>

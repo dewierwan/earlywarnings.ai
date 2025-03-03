@@ -62,14 +62,14 @@ export function Modal({ quote, onClose }: ModalProps) {
           </div>
           
           {/* Author info and source link */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 sm:gap-0">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
               {quote.image && (
-                <div className="flex-shrink-0 sm:mr-4">
+                <div className="flex-shrink-0">
                   <img 
                     src={quote.image} 
                     alt={quote.author} 
-                    className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-md shadow-md"
+                    className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md shadow-md border border-gray-200 dark:border-gray-700"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
@@ -77,24 +77,23 @@ export function Modal({ quote, onClose }: ModalProps) {
                 </div>
               )}
               
-              <div>
-                <p className="text-md sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium">
+              <div className="flex flex-col justify-center">
+                <p className="text-md sm:text-lg md:text-xl text-indigo-600 dark:text-indigo-400 font-medium">
                   {quote.author}
                 </p>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-md">
                   {quote.bio}
                 </p>
+                <a 
+                  href={quote.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-3 inline-block"
+                >
+                  Source
+                </a>
               </div>
             </div>
-
-            <a 
-              href={quote.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-blue-500 dark:text-blue-400 hover:underline mt-2 sm:mt-0 sm:ml-4 inline-block"
-            >
-              Source
-            </a>
           </div>
         </div>
       </div>
