@@ -12,7 +12,7 @@ import { useResponsive } from './utils/useResponsive';
 // Memoize the quote card component for better performance
 const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void }) => (
   <div 
-    className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 theme-transition cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
+    className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
     onClick={onClick}
   >
     <p className="text-sm sm:text-base text-gray-800 dark:text-gray-100 mb-3 sm:mb-4 flex-grow">{quote.text}</p>
@@ -88,41 +88,50 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6 theme-transition">
-      <header className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <button 
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center"
-            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            <Sun className="h-5 w-5 theme-icon icon-sun" />
-            <Moon className="h-5 w-5 theme-icon icon-moon" />
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 p-3 sm:p-4 md:p-6">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-4 sm:mb-6 px-3 sm:px-2">
+          {/* Top row: Title and dark mode toggle */}
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Concerns about AI</h1>
+            <div className="flex items-center">
+              <button 
+                onClick={toggleDarkMode}
+                className="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center"
+                aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                <Sun className="h-5 w-5 theme-icon icon-sun" />
+                <Moon className="h-5 w-5 theme-icon icon-moon" />
+              </button>
+            </div>
+          </div>
+          
+          {/* Controls row - different layout on mobile vs desktop */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Filter by group - first on mobile, left on desktop */}
+            <div className="order-1 sm:order-1">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap">Filter by group:</span>
+                <GroupSelector 
+                  groups={availableGroups} 
+                  selectedGroup={selectedGroup} 
+                  onGroupChange={filterByGroup} 
+                />
+              </div>
+            </div>
+            
+            {/* Sort controls - second on mobile, right on desktop */}
+            <div className="order-2 sm:order-2 mt-2 sm:mt-0">
+              <SortControl sortDirection={sortDirection} onSort={sortQuotes} />
+            </div>
+          </div>
+        </header>
 
-      <div className="max-w-6xl mx-auto px-0 sm:px-2">
-        <div className="flex justify-between items-center mb-4 mx-1 sm:mx-0">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">All Quotes</h2>
-          <SortControl sortDirection={sortDirection} onSort={sortQuotes} />
-        </div>
+        <div className="px-0 sm:px-2">
         
         {selectedGroup !== 'All' ? (
           // When a specific group is selected, show quotes in masonry layout
           <div>
-            <div className="mb-6 mx-1 sm:mx-0">
-              <div className="mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Filter by group:</span>
-              </div>
-              <GroupSelector 
-                groups={availableGroups} 
-                selectedGroup={selectedGroup} 
-                onGroupChange={filterByGroup} 
-              />
-            </div>
-            
             <MasonryLayout columns={columns} gap={16}>
               {quotes.map((quote, index) => (
                 <QuoteCard 
@@ -136,16 +145,6 @@ function App() {
         ) : (
           // When showing all quotes, organize by groups
           <div>
-            <div className="mb-6 mx-1 sm:mx-0">
-              <div className="mb-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Filter by group:</span>
-              </div>
-              <GroupSelector 
-                groups={availableGroups} 
-                selectedGroup={selectedGroup} 
-                onGroupChange={filterByGroup} 
-              />
-            </div>
             
             {/* Group the quotes by their group property */}
             {(() => {
@@ -190,6 +189,7 @@ function App() {
             })()}
           </div>
         )}
+        </div>
       </div>
 
       <Modal 

@@ -60,9 +60,8 @@
   overflow: hidden;
 }
 
-/* Disable all transitions for theme changes */
+/* Theme transition - instantaneous changes */
 .theme-transition {
-  /* No transitions */
   transition: none !important;
 }
 
@@ -125,7 +124,7 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  transition: opacity 1000ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
 }
 
 .modal-container {
@@ -136,7 +135,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  transition: opacity 1000ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
 }
 
 .modal-content {
@@ -149,7 +148,7 @@
   border: 1px solid rgba(229, 231, 235);
   position: relative;
   z-index: 51;
-  transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1), opacity 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .modal-content {
