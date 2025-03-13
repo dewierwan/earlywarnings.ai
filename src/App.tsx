@@ -110,14 +110,11 @@ function App() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             {/* Filter by group - first on mobile, left on desktop */}
             <div className="order-1 sm:order-1">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap">Filter by group:</span>
-                <GroupSelector 
-                  groups={availableGroups} 
-                  selectedGroup={selectedGroup} 
-                  onGroupChange={filterByGroup} 
-                />
-              </div>
+              <GroupSelector 
+                groups={availableGroups} 
+                selectedGroup={selectedGroup} 
+                onGroupChange={filterByGroup} 
+              />
             </div>
             
             {/* Sort controls - second on mobile, right on desktop */}
