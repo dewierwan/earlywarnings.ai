@@ -1,5 +1,6 @@
 /*
   Content-Type: text/html; charset=utf-8
+  Permissions-Policy: interest-cohort=()
 
 /*.js
   Content-Type: application/javascript
