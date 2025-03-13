@@ -76,11 +76,6 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
                 <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
                   {quote.author}
                 </h2>
-                <div className="flex gap-2 mt-1">
-                  <span className="inline-block px-2 py-0.5 text-xs rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800">
-                    {quote.group || 'Uncategorized'}
-                  </span>
-                </div>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 pr-6">
                   {quote.bio}
                 </p>
