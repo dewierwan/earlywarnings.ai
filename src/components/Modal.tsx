@@ -76,6 +76,11 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
                 <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
                   {quote.author}
                 </h2>
+                <div className="flex gap-2 mt-1">
+                  <span className="inline-block px-2 py-0.5 text-xs rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800">
+                    {quote.group || 'Uncategorized'}
+                  </span>
+                </div>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 pr-6">
                   {quote.bio}
                 </p>
@@ -87,7 +92,7 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
           </div>
           
           {/* Quote text */}
-          <div className="max-h-[40vh] overflow-y-auto mb-5 custom-scrollbar">
+          <div className="mb-5">
             <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-100" id="modal-title">
               {quote.text}
             </p>

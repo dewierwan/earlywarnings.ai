@@ -8,6 +8,7 @@ export interface Quote {
   url: string;
   bio: string;
   image: string; // Changed from optional to required
+  group: string;
 }
 
 // Initialize Airtable base
@@ -58,6 +59,12 @@ export async function loadQuotes(): Promise<Quote[]> {
       })
       .all();
     
+    // Log the first record's fields to see what's available
+    if (records.length > 0) {
+      console.log('First record field names:', Object.keys(records[0].fields));
+      // Uncomment to see full details: console.log('First record fields sample:', records[0].fields);
+    }
+    
     // Convert Airtable records to Quote objects and filter out incomplete quotes
     const quotes = records
       .map(record => {
@@ -65,13 +72,47 @@ export async function loadQuotes(): Promise<Quote[]> {
         const yearValue = record.get('Year');
         const year = yearValue ? Number(yearValue) : NaN;
         
+        // Get group and ensure it's properly formatted
+        let group: string = 'Uncategorized';
+        
+        // Try various possible field names for the group
+        const possibleGroupFields = ['Group', 'group', 'CATEGORY', 'Category', 'category', 'Type', 'type'];
+        
+        for (const fieldName of possibleGroupFields) {
+          const rawGroup = record.get(fieldName);
+          
+          // If we find a non-empty value, use it
+          if (rawGroup) {
+            console.log(`Found group in field '${fieldName}':`, rawGroup);
+            
+            if (typeof rawGroup === 'string') {
+              group = rawGroup.trim();
+            } else if (Array.isArray(rawGroup) && rawGroup.length > 0) {
+              group = String(rawGroup[0]).trim();
+            } else {
+              console.log(`Unhandled type for group field '${fieldName}':`, typeof rawGroup);
+            }
+            
+            // Break once we've found a valid group
+            if (group !== 'Uncategorized') {
+              break;
+            }
+          }
+        }
+        
+        // For debugging the first record only
+        if (records.indexOf(record) === 0) {
+          console.log(`First record - Available fields:`, Object.keys(record.fields));
+        }
+        
         const quote = {
           text: record.get('Quote') as string,
-          author: record.get('Person') as string,
+          author: record.get('Name') as string,
           year: year,
           url: record.get('URL') as string,
           bio: record.get('Bio') as string,
-          image: extractImageUrl(record.get('Image'))
+          image: extractImageUrl(record.get('Image')),
+          group: group
         };
         
         return quote;
@@ -89,8 +130,38 @@ export async function loadQuotes(): Promise<Quote[]> {
     console.log(`Filtered out ${records.length - quotes.length} quotes with missing fields.`);
     console.log(`Displaying ${quotes.length} complete quotes.`);
     
+    // Debug group distribution
+    const groupCounts = new Map<string, number>();
+    quotes.forEach(quote => {
+      const group = quote.group || 'Uncategorized';
+      groupCounts.set(group, (groupCounts.get(group) || 0) + 1);
+    });
+    
+    console.log('Group distribution:');
+    Array.from(groupCounts.entries()).forEach(([group, count]) => {
+      console.log(`- ${group}: ${count} quotes`);
+    });
+    
+    // Normalize group names by collecting all unique groups first
+    const uniqueGroups = Array.from(new Set(quotes.map(q => q.group.toLowerCase())));
+    
+    // Create a mapping of normalized group names (lowercase) to their canonical form
+    const groupMap = new Map<string, string>();
+    
+    uniqueGroups.forEach(normalizedGroup => {
+      // Find the first occurrence of this group (case-insensitive) and use its original casing
+      const canonicalGroup = quotes.find(q => q.group.toLowerCase() === normalizedGroup)?.group || normalizedGroup;
+      groupMap.set(normalizedGroup, canonicalGroup);
+    });
+    
+    // Normalize group names in all quotes
+    const normalizedQuotes = quotes.map(quote => ({
+      ...quote,
+      group: groupMap.get(quote.group.toLowerCase()) || 'Uncategorized'
+    }));
+    
     // Shuffle the quotes before returning
-    return shuffleArray(quotes);
+    return shuffleArray(normalizedQuotes);
   } catch (error) {
     console.error('Error loading quotes from Airtable:', error);
     throw new Error('Failed to load quotes. Please try again later.');

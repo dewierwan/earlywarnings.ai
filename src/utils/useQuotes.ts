@@ -22,9 +22,8 @@ export function useQuotes() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isCarouselFading, setIsCarouselFading] = useState(false);
   const [sortDirection, setSortDirection] = useState<SortDirection>('none');
+  const [selectedGroup, setSelectedGroup] = useState<string>('All');
 
   // Load quotes from API
   useEffect(() => {
@@ -32,7 +31,28 @@ export function useQuotes() {
       try {
         const loadedQuotes = await loadQuotes();
         setAllQuotes(loadedQuotes);
-        setQuotes(loadedQuotes);
+        
+        // Organize quotes by group initially
+        // Groups are already normalized from the API
+        const groupMap = new Map<string, Quote[]>();
+        loadedQuotes.forEach(quote => {
+          const group = quote.group || 'Uncategorized';
+          if (!groupMap.has(group)) {
+            groupMap.set(group, []);
+          }
+          groupMap.get(group)?.push(quote);
+        });
+        
+        // Flatten into a single array while maintaining group order
+        let organizedQuotes: Quote[] = [];
+        const groups = Array.from(groupMap.keys()).sort(); // Sort groups alphabetically
+        groups.forEach(group => {
+          const groupQuotes = groupMap.get(group) || [];
+          // Shuffle quotes within each group
+          organizedQuotes = organizedQuotes.concat(shuffleArray(groupQuotes));
+        });
+        
+        setQuotes(organizedQuotes);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Unknown error loading quotes'));
@@ -43,87 +63,167 @@ export function useQuotes() {
     fetchQuotes();
   }, []);
 
-  // Simple autoplay function for the carousel
-  const navigateCarousel = (direction: 'next' | 'prev' = 'next') => {
-    if (quotes.length === 0) return;
-    
-    setIsCarouselFading(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => {
-        if (direction === 'next') {
-          return (prev + 1) % quotes.length;
-        } else {
-          return (prev - 1 + quotes.length) % quotes.length;
-        }
-      });
-      setIsCarouselFading(false);
-    }, 300);
-  };
 
-  // Carousel autoplay effect - follows the sorted order
-  useEffect(() => {
-    if (quotes.length === 0) return;
-    
-    const timer = setInterval(() => {
-      setIsCarouselFading(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % quotes.length);
-        setIsCarouselFading(false);
-      }, 300);
-    }, 10000);
-    
-    return () => clearInterval(timer);
-  }, [quotes.length]);
-
-  // Sort quotes function - simplified to work with a single quotes array
+  // Sort quotes function - supports sorting within groups or overall
   const sortQuotes = (direction: SortDirection) => {
     setSortDirection(direction);
     
-    // Store current quote reference before sorting
-    const currentQuote = quotes[currentIndex];
     let sortedQuotes: Quote[];
+    
+    // Get the base set of quotes (either all quotes or just the current group)
+    let baseQuotes = allQuotes;
+    if (selectedGroup !== 'All') {
+      baseQuotes = allQuotes.filter(q => q.group === selectedGroup);
+    }
     
     if (direction === 'none') {
       // When user selects shuffle option
-      sortedQuotes = shuffleArray([...allQuotes]);
+      if (selectedGroup === 'All') {
+        // When showing all quotes in sections, we need to maintain groups
+        // but shuffle within each group
+        
+        // Group quotes first, ensuring normalized group names
+        const groupMap = new Map<string, Quote[]>();
+        baseQuotes.forEach(quote => {
+          const group = quote.group || 'Uncategorized'; // Group is already normalized from the API
+          if (!groupMap.has(group)) {
+            groupMap.set(group, []);
+          }
+          groupMap.get(group)?.push(quote);
+        });
+        
+        // Then shuffle within each group and flatten
+        sortedQuotes = [];
+        const groups = Array.from(groupMap.keys()).sort(); // Keep groups alphabetical
+        groups.forEach(group => {
+          const groupQuotes = groupMap.get(group) || [];
+          sortedQuotes = sortedQuotes.concat(shuffleArray(groupQuotes));
+        });
+      } else {
+        // Just shuffle the current group
+        sortedQuotes = shuffleArray([...baseQuotes]);
+      }
     } else {
-      // Apply sort by year
-      sortedQuotes = [...allQuotes].sort((a, b) => {
-        return direction === 'asc' ? a.year - b.year : b.year - a.year;
-      });
+      // Sort by year
+      if (selectedGroup === 'All') {
+        // When showing all quotes in sections, maintain groups but sort within groups
+        
+        // Group quotes first, ensuring normalized group names
+        const groupMap = new Map<string, Quote[]>();
+        baseQuotes.forEach(quote => {
+          const group = quote.group || 'Uncategorized'; // Group is already normalized from the API
+          if (!groupMap.has(group)) {
+            groupMap.set(group, []);
+          }
+          groupMap.get(group)?.push(quote);
+        });
+        
+        // Then sort within each group by year and flatten
+        sortedQuotes = [];
+        const groups = Array.from(groupMap.keys()).sort(); // Keep groups alphabetical
+        groups.forEach(group => {
+          const groupQuotes = groupMap.get(group) || [];
+          const sortedGroupQuotes = [...groupQuotes].sort((a, b) => {
+            return direction === 'asc' ? a.year - b.year : b.year - a.year;
+          });
+          sortedQuotes = sortedQuotes.concat(sortedGroupQuotes);
+        });
+      } else {
+        // Apply sort by year for current group
+        sortedQuotes = [...baseQuotes].sort((a, b) => {
+          return direction === 'asc' ? a.year - b.year : b.year - a.year;
+        });
+      }
     }
     
     // Update quotes with new sorted array
     setQuotes(sortedQuotes);
-    
-    // Try to preserve the current quote after sorting
-    if (currentQuote) {
-      const newIndex = sortedQuotes.findIndex(q => 
-        q.author === currentQuote.author && 
-        q.text.substring(0, 50) === currentQuote.text.substring(0, 50)
-      );
-      
-      if (newIndex !== -1) {
-        setCurrentIndex(newIndex);
-      } else {
-        // If quote not found in new order, reset to first quote
-        setCurrentIndex(0);
-      }
-    }
   };
 
-  // Current quote points to the quote in the sorted array
-  const currentQuote = quotes.length > 0 ? quotes[currentIndex] : null;
-
+  // Get all unique groups with proper normalization
+  const availableGroups = allQuotes.length > 0 
+    ? ['All', ...Array.from(new Set(allQuotes.map(q => q.group || 'Uncategorized'))).sort()]
+    : ['All'];
+    
+  // Function to filter quotes by group
+  const filterByGroup = (group: string) => {
+    setSelectedGroup(group);
+    
+    let filteredQuotes: Quote[];
+    
+    // Only filter if not "All"
+    if (group !== 'All') {
+      filteredQuotes = allQuotes.filter(q => q.group === group);
+      
+      // Apply current sort direction to the filtered quotes
+      if (sortDirection !== 'none') {
+        filteredQuotes = [...filteredQuotes].sort((a, b) => {
+          return sortDirection === 'asc' ? a.year - b.year : b.year - a.year;
+        });
+      } else {
+        // Shuffle if no sort is applied
+        filteredQuotes = shuffleArray([...filteredQuotes]);
+      }
+    } else {
+      // When showing all quotes (sections view)
+      if (sortDirection === 'none') {
+        // When no sorting, group and shuffle within each group
+        
+        // Group quotes first, ensuring normalized group names
+        const groupMap = new Map<string, Quote[]>();
+        allQuotes.forEach(quote => {
+          const group = quote.group || 'Uncategorized'; // Group is already normalized from the API
+          if (!groupMap.has(group)) {
+            groupMap.set(group, []);
+          }
+          groupMap.get(group)?.push(quote);
+        });
+        
+        // Then shuffle within each group and flatten
+        filteredQuotes = [];
+        const groups = Array.from(groupMap.keys()).sort(); // Keep groups alphabetical
+        groups.forEach(group => {
+          const groupQuotes = groupMap.get(group) || [];
+          filteredQuotes = filteredQuotes.concat(shuffleArray(groupQuotes));
+        });
+      } else {
+        // When sorted by year, group and sort within each group
+        
+        // Group quotes first, ensuring normalized group names
+        const groupMap = new Map<string, Quote[]>();
+        allQuotes.forEach(quote => {
+          const group = quote.group || 'Uncategorized'; // Group is already normalized from the API
+          if (!groupMap.has(group)) {
+            groupMap.set(group, []);
+          }
+          groupMap.get(group)?.push(quote);
+        });
+        
+        // Then sort within each group by year and flatten
+        filteredQuotes = [];
+        const groups = Array.from(groupMap.keys()).sort(); // Keep groups alphabetical
+        groups.forEach(group => {
+          const groupQuotes = groupMap.get(group) || [];
+          const sortedGroupQuotes = [...groupQuotes].sort((a, b) => {
+            return sortDirection === 'asc' ? a.year - b.year : b.year - a.year;
+          });
+          filteredQuotes = filteredQuotes.concat(sortedGroupQuotes);
+        });
+      }
+    }
+    
+    // Update quotes with new filtered array
+    setQuotes(filteredQuotes);
+  };
+  
   return {
     quotes,             // Single source of truth - all quotes use the same array and sort
     loading,
     error,
-    currentQuote,       // Current quote from the sorted array
-    isCarouselFading,
     sortDirection,
+    selectedGroup,
+    availableGroups,
     sortQuotes,
-    nextQuote: () => navigateCarousel('next'),
-    prevQuote: () => navigateCarousel('prev')
+    filterByGroup
   };
 }
