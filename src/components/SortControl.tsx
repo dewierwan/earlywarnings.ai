@@ -1,4 +1,4 @@
-import { ArrowUpWideNarrow, ArrowDownWideNarrow, Shuffle } from 'lucide-react';
+import { ArrowUpWideNarrow, ArrowDownWideNarrow } from 'lucide-react';
 import { SortDirection } from '../utils/useQuotes';
 
 interface SortControlProps {
@@ -34,18 +34,6 @@ export function SortControl({ sortDirection, onSort }: SortControlProps) {
           title="Newest first"
         >
           <ArrowDownWideNarrow size={16} className="sm:w-[18px] sm:h-[18px]" />
-        </button>
-        <button
-          onClick={() => onSort('none')}
-          className={`p-1 sm:p-1.5 rounded-md ${
-            sortDirection === 'none'
-              ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300'
-              : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
-          }`}
-          aria-label="Random order"
-          title="Shuffle quotes"
-        >
-          <Shuffle size={16} className="sm:w-[18px] sm:h-[18px]" />
         </button>
       </div>
     </div>

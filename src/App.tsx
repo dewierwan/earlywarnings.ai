@@ -132,7 +132,12 @@ function App() {
         {selectedGroup !== 'All' ? (
           // When a specific group is selected, show quotes in masonry layout
           <div>
-            <MasonryLayout columns={columns} gap={16}>
+            <MasonryLayout 
+              columns={columns} 
+              gap={16} 
+              sortDirection={sortDirection} 
+              quotes={quotes}
+            >
               {quotes.map((quote, index) => (
                 <QuoteCard 
                   key={index}
@@ -174,7 +179,12 @@ function App() {
                         {group}
                       </h3>
                     </div>
-                    <MasonryLayout columns={columns} gap={16}>
+                    <MasonryLayout 
+                      columns={columns} 
+                      gap={16} 
+                      sortDirection={sortDirection} 
+                      quotes={groupQuotes}
+                    >
                       {groupQuotes.map((quote, index) => (
                         <QuoteCard 
                           key={index}
