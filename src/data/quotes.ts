@@ -35,14 +35,15 @@ function shuffleArray<T>(array: T[]): T[] {
 /**
  * Extract image URL from Airtable field which could be in different formats
  */
-function extractImageUrl(imageField: any): string {
+function extractImageUrl(imageField: unknown): string {
   if (!imageField) return '';
   
   if (typeof imageField === 'string') {
     return imageField;
   } else if (Array.isArray(imageField) && imageField.length > 0) {
     // Airtable sometimes returns attachments as an array of objects
-    return imageField[0].url || '';
+    const attachment = imageField[0] as { url?: string };
+    return attachment.url || '';
   }
   
   return '';
@@ -55,7 +56,8 @@ export async function loadQuotes(): Promise<Quote[]> {
   try {
     const records = await base(AIRTABLE_TABLE_NAME)
       .select({
-        view: 'Grid view'
+        view: 'Grid view',
+        returnFieldsByFieldId: true
       })
       .all();
     
@@ -65,39 +67,30 @@ export async function loadQuotes(): Promise<Quote[]> {
       // Uncomment to see full details: console.log('First record fields sample:', records[0].fields);
     }
     
+    // Define field ID constants
+    const FIELD_IDS = {
+      QUOTE: 'fldCxgQmS602iTuI5',
+      NAME: 'fldAew6lQ99g5qscS',
+      URL: 'fldqmfM3I3P9QoxjJ',
+      YEAR: 'fldKmiOa6DI3Z5pyy',
+      BIO: 'fldap1YTquRRffQg2',
+      GROUP: 'fldiEEAaSd9DCjUFA',
+      IMAGE: 'fldjcaetyXZolccCc'
+    };
+
     // Convert Airtable records to Quote objects and filter out incomplete quotes
     const quotes = records
       .map(record => {
         // Get the year and make sure it's a valid number
-        const yearValue = record.get('Year');
+        const yearValue = record.fields[FIELD_IDS.YEAR];
         const year = yearValue ? Number(yearValue) : NaN;
         
-        // Get group and ensure it's properly formatted
-        let group: string = 'Uncategorized';
-        
-        // Try various possible field names for the group
-        const possibleGroupFields = ['Group', 'group', 'CATEGORY', 'Category', 'category', 'Type', 'type'];
-        
-        for (const fieldName of possibleGroupFields) {
-          const rawGroup = record.get(fieldName);
-          
-          // If we find a non-empty value, use it
-          if (rawGroup) {
-            console.log(`Found group in field '${fieldName}':`, rawGroup);
-            
-            if (typeof rawGroup === 'string') {
-              group = rawGroup.trim();
-            } else if (Array.isArray(rawGroup) && rawGroup.length > 0) {
-              group = String(rawGroup[0]).trim();
-            } else {
-              console.log(`Unhandled type for group field '${fieldName}':`, typeof rawGroup);
-            }
-            
-            // Break once we've found a valid group
-            if (group !== 'Uncategorized') {
-              break;
-            }
-          }
+        // Get group value directly from field ID
+        let group: string = record.fields[FIELD_IDS.GROUP] as string || 'Uncategorized';
+        if (typeof group === 'string') {
+          group = group.trim();
+        } else if (Array.isArray(group) && group.length > 0) {
+          group = String(group[0]).trim();
         }
         
         // For debugging the first record only
@@ -106,12 +99,12 @@ export async function loadQuotes(): Promise<Quote[]> {
         }
         
         const quote = {
-          text: record.get('Quote') as string,
-          author: record.get('Name') as string,
+          text: record.fields[FIELD_IDS.QUOTE] as string,
+          author: record.fields[FIELD_IDS.NAME] as string,
           year: year,
-          url: record.get('URL') as string,
-          bio: record.get('Bio') as string,
-          image: extractImageUrl(record.get('Image')),
+          url: record.fields[FIELD_IDS.URL] as string,
+          bio: record.fields[FIELD_IDS.BIO] as string,
+          image: extractImageUrl(record.fields[FIELD_IDS.IMAGE]),
           group: group
         };
         
