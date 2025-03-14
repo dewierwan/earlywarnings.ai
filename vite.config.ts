@@ -35,12 +35,7 @@ export default defineConfig({
     assetsDir: 'assets',
     // Ensure ES module format is used
     target: 'es2015',
-    minify: 'terser',
-    terserOptions: {
-      format: {
-        comments: false
-      }
-    },
+    minify: 'esbuild', // Changed from terser to esbuild to avoid dependency issues
     rollupOptions: {
       input: {
         main: './index.html',
