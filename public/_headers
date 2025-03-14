@@ -1,27 +1,24 @@
 /*
   X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: *
   Permissions-Policy: interest-cohort=()
 
-/*.js
-  Content-Type: application/javascript
+# Set MIME type for all JavaScript files
+*.js
+  Content-Type: application/javascript; charset=utf-8
 
-/*.css
-  Content-Type: text/css
+# Set MIME type for all CSS files
+*.css
+  Content-Type: text/css; charset=utf-8
 
-/*.svg
+# Set MIME type for all SVG files
+*.svg
   Content-Type: image/svg+xml
 
-/assets/*
-  Access-Control-Allow-Origin: *
-
-/assets/*.js
-  Content-Type: application/javascript
-  
-/assets/*.mjs
-  Content-Type: application/javascript
-  
+# JavaScript in assets directory specifically
 /assets/*-*.js
-  Content-Type: application/javascript
+  Content-Type: application/javascript; charset=utf-8
 
-/assets/*.css
-  Content-Type: text/css
+# CSS in assets directory specifically  
+/assets/*-*.css
+  Content-Type: text/css; charset=utf-8
