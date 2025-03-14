@@ -1,4 +1,4 @@
-# AI Safety Quotes - Coding Guidelines
+# AI Early Warnings - Coding Guidelines
 
 ## Project Commands
 - `npm run dev` - Start development server

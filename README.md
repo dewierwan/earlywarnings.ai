@@ -1,8 +1,8 @@
-# AI Safety Quotes
+# AI Early Warnings
 
-A curated collection of quotes about AI safety concerns from researchers, industry leaders, and experts. This responsive web application displays quotes in an elegant masonry layout with dark mode support.
+A curated collection of quotes about AI risks and safety concerns from researchers, industry leaders, and experts. This responsive web application displays quotes in an elegant masonry layout with dark mode support.
 
-![AI Safety Quotes Screenshot](https://placehold.co/600x400?text=AI+Safety+Quotes+Screenshot)
+![AI Early Warnings Screenshot](https://placehold.co/600x400?text=AI+Early+Warnings+Screenshot)
 
 ## Features
 
