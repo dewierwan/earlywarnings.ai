@@ -29,7 +29,7 @@ export default defineConfig({
       }
     }
   ],
-  base: '/',
+  base: '',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -55,8 +55,14 @@ export default defineConfig({
   },
   server: {
     headers: {
-      'Content-Type': 'application/javascript',
       'Access-Control-Allow-Origin': '*',
+    },
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: ['..'],
+    },
+    hmr: {
+      overlay: true,
     },
   },
 });
