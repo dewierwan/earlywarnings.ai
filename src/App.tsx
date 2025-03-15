@@ -15,7 +15,7 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
     className="p-4 sm:p-5 border border-gray-200 dark:border-gray-700 rounded-lg card-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_28px_-5px_rgba(79,70,229,0.15)] dark:hover:shadow-[0_12px_28px_-5px_rgba(129,140,248,0.2)] hover:border-indigo-300 dark:hover:border-indigo-500 cursor-pointer transform hover:-translate-y-1 active:scale-[0.98] flex flex-col bg-white dark:bg-gray-800"
     onClick={onClick}
   >
-    <p className="text-sm sm:text-base text-gray-800 dark:text-gray-100 mb-3 sm:mb-4 flex-grow">{quote.text}</p>
+    <p className="text-[16px] text-gray-800 dark:text-gray-100 mb-3 sm:mb-4 flex-grow leading-relaxed font-normal">{quote.text}</p>
     <div className="flex justify-between items-start mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
       <div className="flex items-start gap-4 overflow-hidden">
         {quote.image && (
@@ -31,13 +31,13 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <span className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium block">
+          <span className="text-[14px] text-indigo-600 dark:text-indigo-400 font-medium block">
             {quote.author}
           </span>
-          <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+          <p className="text-[14px] text-gray-600 dark:text-gray-300 mt-1 font-medium">
             {quote.bio}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1 font-medium">
             {quote.year}
           </p>
         </div>
@@ -93,7 +93,7 @@ function App() {
         <header className="mb-4 sm:mb-6 px-3 sm:px-2">
           {/* Top row: Title and dark mode toggle */}
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">AI Early Warnings</h1>
+            <h1 className="sm:text-[20px] font-bold text-gray-800 dark:text-white">AI Early Warnings</h1>
             <div className="flex items-center">
               <button 
                 onClick={toggleDarkMode}
@@ -172,7 +172,7 @@ function App() {
                 return (
                   <div key={group} className="mb-12">
                     <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-                      <h3 className="text-xl text-indigo-600 dark:text-indigo-400 font-medium pb-2">
+                      <h3 className="text-[20px] text-indigo-600 dark:text-indigo-400 font-bold pb-2">
                         {group}
                       </h3>
                     </div>

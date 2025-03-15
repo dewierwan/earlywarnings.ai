@@ -73,13 +73,13 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
               )}
               
               <div className="flex-1">
-                <h2 className="text-lg sm:text-xl md:text-2xl text-indigo-600 dark:text-indigo-400 font-medium">
+                <h2 className="text-[20px] text-indigo-600 dark:text-indigo-400 font-bold">
                   {quote.author}
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 pr-6">
+                <p className="text-[14px] text-gray-600 dark:text-gray-300 mt-1 pr-6 font-medium">
                   {quote.bio}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">
+                <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1 font-medium">
                   {quote.year}
                 </p>
               </div>
@@ -88,7 +88,7 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
           
           {/* Quote text */}
           <div className="mb-5">
-            <p className="text-lg sm:text-xl text-gray-800 dark:text-gray-100" id="modal-title">
+            <p className="text-[16px] text-gray-800 dark:text-gray-100 leading-relaxed font-normal" id="modal-title">
               {quote.text}
             </p>
           </div>
