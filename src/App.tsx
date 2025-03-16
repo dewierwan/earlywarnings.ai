@@ -97,7 +97,7 @@ function App() {
             <div className="flex items-center">
               <button 
                 onClick={toggleDarkMode}
-                className="p-2 rounded-full bg-bg-light dark:bg-dark-card text-gray-800 dark:text-dark-text shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center"
+                className="p-2 rounded-full bg-bg-light dark:bg-dark-card text-gray-800 dark:text-dark-text shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center theme-toggle"
                 aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               >
                 <Sun className="h-5 w-5 theme-icon icon-sun" />
