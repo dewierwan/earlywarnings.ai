@@ -73,7 +73,7 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
               )}
               
               <div className="flex-1">
-                <h2 className="text-[20px] text-accent-blue dark:text-dark-accent font-bold">
+                <h2 className="text-[20px] text-accent-blue dark:text-white font-bold">
                   {quote.author}
                 </h2>
                 <p className="text-[14px] text-text-dark dark:text-dark-text mt-1 pr-6 font-medium">
@@ -99,7 +99,7 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
               href={quote.url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm text-accent-blue dark:text-dark-accent hover:underline inline-flex items-center gap-1"
+              className="text-sm text-accent-blue dark:text-dark-text hover:underline inline-flex items-center gap-1"
             >
               View Source
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">

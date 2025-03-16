@@ -31,7 +31,7 @@ const QuoteCard = memo(({ quote, onClick }: { quote: Quote; onClick: () => void 
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <span className="text-[14px] text-accent-blue dark:text-dark-accent font-bold block">
+          <span className="text-[14px] text-accent-blue dark:text-white font-bold block">
             {quote.author}
           </span>
           <p className="text-[14px] text-text-dark dark:text-dark-text mt-1 font-medium">
