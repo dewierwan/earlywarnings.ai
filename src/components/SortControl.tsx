@@ -8,14 +8,14 @@ interface SortControlProps {
 
 export function SortControl({ sortDirection, onSort }: SortControlProps) {
   return (
-    <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm p-1">
+    <div className="flex items-center bg-bg-light dark:bg-dark-card rounded-lg border border-border-light dark:border-dark-border shadow-sm p-1">
       <div className="flex gap-1 p-0.5 ml-1">
         <button
           onClick={() => onSort('asc')}
           className={`px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm rounded-md flex items-center ${
             sortDirection === 'asc'
-              ? 'bg-indigo-600 text-white shadow-md hover:bg-indigo-700'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-sm hover:shadow'
+              ? 'bg-accent-blue text-bg-light shadow-md hover:bg-accent-blue/90'
+              : 'bg-bg-light dark:bg-dark-card text-text-dark dark:text-dark-text hover:text-accent-blue dark:hover:text-dark-accent border border-border-light dark:border-dark-border hover:border-accent-blue dark:hover:border-dark-accent shadow-sm hover:shadow dark:hover:shadow-dark-hover'
           }`}
           aria-label="Sort by year ascending"
           title="Oldest first"
@@ -27,8 +27,8 @@ export function SortControl({ sortDirection, onSort }: SortControlProps) {
           onClick={() => onSort('desc')}
           className={`px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm rounded-md flex items-center ${
             sortDirection === 'desc'
-              ? 'bg-indigo-600 text-white shadow-md hover:bg-indigo-700'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-sm hover:shadow'
+              ? 'bg-accent-blue text-bg-light shadow-md hover:bg-accent-blue/90'
+              : 'bg-bg-light dark:bg-dark-card text-text-dark dark:text-dark-text hover:text-accent-blue dark:hover:text-dark-accent border border-border-light dark:border-dark-border hover:border-accent-blue dark:hover:border-dark-accent shadow-sm hover:shadow dark:hover:shadow-dark-hover'
           }`}
           aria-label="Sort by year descending"
           title="Newest first"
