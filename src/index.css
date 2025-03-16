@@ -74,24 +74,24 @@
 
 /* Light mode default state */
 .icon-sun {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.5);
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 .icon-moon {
-  opacity: 1;
-  transform: rotate(0) scale(1);
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
 }
 
 /* Dark mode default state */
 .dark .icon-sun {
-  opacity: 1;
-  transform: rotate(0) scale(1);
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
 }
 
 .dark .icon-moon {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.5);
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 /* Hover effect to preview theme change */
@@ -106,13 +106,13 @@
 }
 
 .theme-toggle:hover .icon-sun {
-  opacity: 1;
-  transform: rotate(0) scale(1);
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
 }
 
 .theme-toggle:hover .icon-moon {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.5);
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 /* Dark mode hover - preview light mode */
@@ -122,13 +122,13 @@
 }
 
 .dark .theme-toggle:hover .icon-sun {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.5);
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 .dark .theme-toggle:hover .icon-moon {
-  opacity: 1;
-  transform: rotate(0) scale(1);
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
 }
 
 /* Custom scrollbar styles */
