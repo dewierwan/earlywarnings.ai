@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from 'react';
+import { useState, memo, useEffect, useRef } from 'react';
 import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { Quote } from './data/quotes';
 import { Modal } from './components/Modal';
@@ -53,6 +53,7 @@ const createQuoteIdentifier = (quote: Quote): string =>
 
 function App() {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [recentlyToggled, setRecentlyToggled] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
   const { 
     quotes, 
@@ -66,7 +67,16 @@ function App() {
   } = useQuotes();
   const { columns } = useResponsive();
   
-  // No keyboard navigation on main page
+  // Handle theme toggle with temporarily disabling hover effect
+  const handleThemeToggle = () => {
+    toggleDarkMode();
+    setRecentlyToggled(true);
+    
+    // Reset the flag after the mouse leaves the button
+    setTimeout(() => {
+      setRecentlyToggled(false);
+    }, 800);
+  };
 
   if (loading) {
     return (
@@ -96,8 +106,8 @@ function App() {
             <h1 className="sm:text-[20px] font-bold text-text-dark dark:text-dark-text">AI Early Warnings</h1>
             <div className="flex items-center">
               <button 
-                onClick={toggleDarkMode}
-                className="p-2 rounded-full bg-bg-light dark:bg-dark-card text-gray-800 dark:text-dark-text shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center theme-toggle"
+                onClick={handleThemeToggle}
+                className={`p-2 rounded-full bg-bg-light dark:bg-dark-card text-gray-800 dark:text-dark-text shadow-md hover:shadow-lg hover:scale-105 relative w-9 h-9 flex items-center justify-center ${recentlyToggled ? '' : 'theme-toggle'}`}
                 aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               >
                 <Sun className="h-5 w-5 theme-icon icon-sun" />
