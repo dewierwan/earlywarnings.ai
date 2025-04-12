@@ -100,7 +100,7 @@ function App() {
         <header className="mb-4 sm:mb-6 px-3 sm:px-2">
           {/* Top row: Title and dark mode toggle */}
           <div className="flex justify-between items-center mb-4">
-            <h1 className="sm:text-[20px] font-bold text-text-dark dark:text-dark-text">AI Early Warnings</h1>
+            <h1 className="sm:text-[20px] font-bold text-text-dark dark:text-dark-text">EarlyWarnings.AI</h1>
             <div className="flex items-center">
               <button 
                 onClick={handleThemeToggle}
