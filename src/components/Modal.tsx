@@ -21,6 +21,10 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
+      } else if (e.key === 'ArrowLeft' && onPrevious) {
+        onPrevious();
+      } else if (e.key === 'ArrowRight' && onNext) {
+        onNext();
       }
     };
     
@@ -30,7 +34,7 @@ export function Modal({ quote, onClose, onPrevious, onNext }: ModalProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [onClose]);
+  }, [onClose, onPrevious, onNext]);
 
   const modalContent = (
     <>
