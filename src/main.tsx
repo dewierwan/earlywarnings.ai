@@ -5,13 +5,11 @@ import './index.css';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 
-const POSTHOG_KEY = import.meta.env.VITE_PUBLIC_POSTHOG_KEY;
-if (!POSTHOG_KEY) {
-  throw new Error('PostHog key is not defined in environment variables');
-}
+// Debug log to check the value
+console.log('PostHog Key:', import.meta.env.VITE_PUBLIC_POSTHOG_KEY);
 
-// Create the client instance with explicit token
-const client = posthog.init(POSTHOG_KEY, {
+// Initialize without throwing error
+const client = posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || 'phc_eu5ZY4jalD4ocBKecOXThX4Bt8fOYIEWvuVm3kExSy5', {
   api_host: 'https://eu.i.posthog.com'
 });
 
