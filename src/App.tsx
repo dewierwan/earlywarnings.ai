@@ -3,10 +3,9 @@ import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { Quote } from './data/quotes';
 import { Modal } from './components/Modal';
 import { MasonryLayout } from './components/MasonryLayout';
-import { SortControl } from './components/SortControl';
 import { GroupSelector } from './components/GroupSelector';
 import { useTheme } from './utils/useTheme';
-import { useQuotes, SortDirection } from './utils/useQuotes';
+import { useQuotes } from './utils/useQuotes';
 import { useResponsive } from './utils/useResponsive';
 
 // Memoize the quote card component for better performance
@@ -59,8 +58,6 @@ function App() {
     quotes, 
     loading, 
     error, 
-    sortDirection, 
-    sortQuotes, 
     availableGroups,
     selectedGroup,
     filterByGroup
@@ -126,86 +123,27 @@ function App() {
                 onGroupChange={filterByGroup} 
               />
             </div>
-            
-            {/* Sort controls - second on mobile, right on desktop */}
-            <div className="order-2 sm:order-2 mt-2 sm:mt-0">
-              <SortControl sortDirection={sortDirection} onSort={sortQuotes} />
-            </div>
           </div>
         </header>
 
         <div className="px-0 sm:px-2">
         
-        {selectedGroup !== 'All' ? (
-          // When a specific group is selected, show quotes in masonry layout
-          <div>
-            <MasonryLayout 
-              columns={columns} 
-              gap={16} 
-              sortDirection={sortDirection} 
-              quotes={quotes}
-            >
-              {quotes.map((quote, index) => (
-                <QuoteCard 
-                  key={index}
-                  quote={quote}
-                  onClick={() => setSelectedQuote(quote)}
-                />
-              ))}
-            </MasonryLayout>
-          </div>
-        ) : (
-          // When showing all quotes, organize by groups
-          <div>
-            
-            {/* Group the quotes by their group property */}
-            {(() => {
-              // Get all unique groups from normalized quotes
-              const groupMap = new Map<string, Quote[]>();
-              
-              // Organize quotes by their group
-              quotes.forEach(quote => {
-                const group = quote.group || 'Uncategorized';
-                if (!groupMap.has(group)) {
-                  groupMap.set(group, []);
-                }
-                groupMap.get(group)?.push(quote);
-              });
-              
-              // Get sorted group names
-              const sortedGroups = Array.from(groupMap.keys()).sort();
-              
-              return sortedGroups.map(group => {
-                // Get quotes for this group
-                const groupQuotes = groupMap.get(group) || [];
-                
-                return (
-                  <div key={group} className="mb-12">
-                    <div className="border-b border-border-light dark:border-dark-border mb-6">
-                      <h3 className="text-[20px] text-accent-blue dark:text-dark-accent font-bold pb-2">
-                        {group}
-                      </h3>
-                    </div>
-                    <MasonryLayout 
-                      columns={columns} 
-                      gap={16} 
-                      sortDirection={sortDirection} 
-                      quotes={groupQuotes}
-                    >
-                      {groupQuotes.map((quote, index) => (
-                        <QuoteCard 
-                          key={index}
-                          quote={quote}
-                          onClick={() => setSelectedQuote(quote)}
-                        />
-                      ))}
-                    </MasonryLayout>
-                  </div>
-                );
-              });
-            })()}
-          </div>
-        )}
+        {/* Show all quotes in a single masonry layout without grouping */}
+        <div>
+          <MasonryLayout 
+            columns={columns} 
+            gap={16} 
+            quotes={quotes}
+          >
+            {quotes.map((quote, index) => (
+              <QuoteCard 
+                key={index}
+                quote={quote}
+                onClick={() => setSelectedQuote(quote)}
+              />
+            ))}
+          </MasonryLayout>
+        </div>
         </div>
       </div>
 

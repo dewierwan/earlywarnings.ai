@@ -13,7 +13,7 @@ export function MasonryLayout({
   children, 
   columns,
   gap = 32,
-  sortDirection = 'desc',
+  sortDirection = 'desc', // Kept for backward compatibility
   quotes = []
 }: MasonryLayoutProps) {
   // Only manage the responsive gap, since columns come from parent
@@ -56,61 +56,38 @@ export function MasonryLayout({
       columnWrapper[`column${i}`] = [];
     }
     
-    // SORTED BY YEAR: Maintain chronological order while optimizing within year groups
+    // SORTED BY PRIORITY: Maintain priority order while optimizing layout
     if (quotes.length === children.length) {
-      // 1. Group items by year
-      const yearGroups: Record<number, number[]> = {};
+      // Process items in their existing order (which should be priority-sorted)
       quotes.forEach((quote, index) => {
-        const year = quote.year;
-        if (!yearGroups[year]) {
-          yearGroups[year] = [];
-        }
-        yearGroups[year].push(index);
-      });
-      
-      // 2. Get years in sorted order
-      const years = Object.keys(yearGroups).map(Number);
-      years.sort((a, b) => {
-        return sortDirection === 'asc' ? a - b : b - a;
-      });
-      
-      // 3. Process each year group
-      years.forEach(year => {
-        const indices = yearGroups[year];
-        const yearGroupItems = indices.map(idx => ({
-          index: idx,
+        const item = {
+          index,
           // Better height estimation based on text content
           estimatedHeight: 
             // Fixed header height
             120 + 
             // Text height - based on string length and line wrapping
-            Math.ceil(quotes[idx].text.length / 40) * 20 +
+            Math.ceil(quote.text.length / 40) * 20 +
             // Bio height - approximately based on bio text length
-            Math.min(60, Math.ceil(quotes[idx].bio.length / 50) * 20)
-        }));
+            Math.min(60, Math.ceil(quote.bio.length / 50) * 20)
+        };
         
-        // Sort by estimated height for better packing within each year
-        yearGroupItems.sort((a, b) => b.estimatedHeight - a.estimatedHeight);
+        // Find the column with the smallest height
+        const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
         
-        // Place items using a greedy approach
-        yearGroupItems.forEach(item => {
-          // Find the column with the smallest height
-          const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-          
-          // Add the item to the shortest column
-          columnWrapper[`column${shortestColumnIndex}`].push(
-            <div 
-              key={item.index} 
-              className="mb-4 sm:mb-6"
-              style={{ marginBottom: `${columnGap}px` }}
-            >
-              {children[item.index]}
-            </div>
-          );
-          
-          // Update the column height
-          columnHeights[shortestColumnIndex] += item.estimatedHeight + columnGap;
-        });
+        // Add the item to the shortest column
+        columnWrapper[`column${shortestColumnIndex}`].push(
+          <div 
+            key={item.index} 
+            className="mb-4 sm:mb-6"
+            style={{ marginBottom: `${columnGap}px` }}
+          >
+            {children[item.index]}
+          </div>
+        );
+        
+        // Update the column height
+        columnHeights[shortestColumnIndex] += item.estimatedHeight + columnGap;
       });
     } else {
       // FALLBACK: Simple balanced layout when no quotes data is available
@@ -157,7 +134,7 @@ export function MasonryLayout({
     }
     
     return result;
-  }, [children, columns, columnGap, sortDirection, quotes]);
+  }, [children, columns, columnGap, quotes]);
   
   // Return a responsive flex container
   return (
